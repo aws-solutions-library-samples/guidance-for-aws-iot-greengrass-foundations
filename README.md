@@ -1,202 +1,155 @@
-# Guidance Title (required)
+# Guidance for AWS IoT Greengrass Foundations on AWS
 
-The Guidance title should be consistent with the title established first in Alchemy.
+## Table of Contents
 
-**Example:** *Guidance for Product Substitutions on AWS*
-
-This title correlates exactly to the Guidance it’s linked to, including its corresponding sample code repository. 
-
-
-## Table of Content (required)
-
-List the top-level sections of the README template, along with a hyperlink to the specific section.
-
-### Required
-
-1. [Overview](#overview-required)
+1. [Overview](#overview)
+    - [Architecture](#architecture)
     - [Cost](#cost)
-2. [Prerequisites](#prerequisites-required)
-    - [Operating System](#operating-system-required)
-3. [Deployment Steps](#deployment-steps-required)
-4. [Deployment Validation](#deployment-validation-required)
-5. [Running the Guidance](#running-the-guidance-required)
-6. [Next Steps](#next-steps-required)
-7. [Cleanup](#cleanup-required)
+2. [Prerequisites](#prerequisites)
+    - [Operating System](#operating-system)
+    - [Third-party tools](#third-party-tools)
+    - [AWS CDK bootstrap](#aws-cdk-bootstrap)
+    - [Supported Regions](#supported-regions)
+3. [Deployment Steps](#deployment-steps)
+4. [Deployment Validation](#deployment-validation)
+5. [Running the Guidance](#running-the-guidance)
+6. [Next Steps](#next-steps)
+7. [Cleanup](#cleanup)
+8. [Additional Considerations, Limitations, and Feedback](#additional-considerations-limitations-and-feedback)
+9. [Notices](#notices-optional)
 
-***Optional***
+## Overview
 
-8. [FAQ, known issues, additional considerations, and limitations](#faq-known-issues-additional-considerations-and-limitations-optional)
-9. [Revisions](#revisions-optional)
-10. [Notices](#notices-optional)
-11. [Authors](#authors-optional)
+The AWS IoT Greengrass Foundations guidance enables customers to quickly and reliably build robust edge computing capabilities using AWS IoT Greengrass. By providing an automated CDK deployment, reusable workflows, and integrated components, this architecture reduces the complexity of setting up secure Greengrass environments. Companies can focus their efforts on developing innovative solutions instead of managing infrastructure. With minimal effort, hundreds of Greengrass-enabled devices can be deployed to collect, analyze, and act on data at the edge while seamlessly integrating with cloud capabilities. By processing data locally, Greengrass minimizes latency, reduces costs, and enhances privacy. This accelerated time-to-value couples with the scalability and global reach of AWS to provide a compelling platform for IoT innovation. The blueprint's proven patterns and automation free developers to rapidly deliver intelligent edge capabilities and transform their businesses.
 
-## Overview (required)
+### Architecture
 
-1. Provide a brief overview explaining the what, why, or how of your Guidance. You can answer any one of the following to help you write this:
-
-    - **Why did you build this Guidance?**
-    - **What problem does this Guidance solve?**
-
-2. Include the architecture diagram image, as well as the steps explaining the high-level overview and flow of the architecture. 
-    - To add a screenshot, create an ‘assets/images’ folder in your repository and upload your screenshot to it. Then, using the relative file path, add it to your README. 
+![reference architecture](assets/images/architecture.png)
 
 ### Cost
 
-This section is for a high-level cost estimate. Think of a likely straightforward scenario with reasonable assumptions based on the problem the Guidance is trying to solve. If applicable, provide an in-depth cost breakdown table in this section.
+You are responsible for the cost of the AWS services used while running this Guidance. As of October 2023, the cost for running this Guidance with the default settings in the US West (Oregon) AWS Region is approximately **$XX per month**, using the following assumptions:
 
-Start this section with the following boilerplate text:
+- ...
+- ...
+- ...
 
-_You are responsible for the cost of the AWS services used while running this Guidance. As of <month> <year>, the cost for running this Guidance with the default settings in the <Default AWS Region (Most likely will be US East (N. Virginia)) > is approximately $<n.nn> per month for processing ( <nnnnn> records )._
+## Prerequisites
 
-Replace this amount with the approximate cost for running your Guidance in the default Region. This estimate should be per month and for processing/serving resonable number of requests/entities.
+### Operating System
 
+This Guidance is compatible with Mac, Linux, and Windows operating systems.
 
-## Prerequisites (required)
+### Third-party tools
 
-### Operating System (required)
+- [AWS Cloud Development Kit (AWS CDK) v2](https://docs.aws.amazon.com/cdk/v2/guide/home.html)
+- TypeScript 3.8 or later (```npm -g install typescript```)
+- [AWS Command Line Interface (CLI)](https://aws.amazon.com/cli/) (optional)
 
-- Talk about the base Operating System (OS) and environment that can be used to run or deploy this Guidance, such as *Mac, Linux, or Windows*. Include all installable packages or modules required for the deployment. 
-- By default, assume Amazon Linux 2/Amazon Linux 2023 AMI as the base environment. All packages that are not available by default in AMI must be listed out.  Include the specific version number of the package or module.
+### AWS CDK bootstrap
 
-**Example:**
-“These deployment instructions are optimized to best work on **<Amazon Linux 2 AMI>**.  Deployment in another OS may require additional steps.”
+This Guidance uses AWS CDK. Bootstrapping is the process of provisioning resources for the AWS CDK before you can deploy AWS CDK apps into an AWS environment (an AWS environment is a combination of an AWS account and Region). If you are using AWS CDK for the first time in an AWS environment, please run the following bootstrapping command:
 
-- Include install commands for packages, if applicable.
+```cdk bootstrap aws://ACCOUNT-NUMBER/REGION```
 
+For additional information or customizations with AWS CDK bootstrapping, see [Bootstrapping](https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html) in the AWS CDK documentation.
 
-### Third-party tools (If applicable)
+### Supported Regions
 
-*List any installable third-party tools required for deployment.*
+This code sample is compatible in all AWS Regions where AWS IoT Greengrass 
 
+## Deployment Steps
 
-### AWS account requirements (If applicable)
+### Option 1: Deploy via Amazon CodeCatalyst blueprint
 
-*List out pre-requisites required on the AWS account if applicable, this includes enabling AWS regions, requiring ACM certificate.*
-
-**Example:** “This deployment requires you have public ACM certificate available in your AWS account”
-
-**Example resources:**
-- ACM certificate 
-- DNS record
-- S3 bucket
-- VPC
-- IAM role with specific permissions
-- Enabling a Region or service etc.
-
-
-### aws cdk bootstrap (if sample code has aws-cdk)
-
-<If using aws-cdk, include steps for account bootstrap for new cdk users.>
-
-**Example blurb:** “This Guidance uses aws-cdk. If you are using aws-cdk for first time, please perform the below bootstrapping....”
-
-### Service limits  (if applicable)
-
-<Talk about any critical service limits that affect the regular functioning of the Guidance. If the Guidance requires service limit increase, include the service name, limit name and link to the service quotas page.>
-
-### Supported Regions (if applicable)
-
-<If the Guidance is built for specific AWS Regions, or if the services used in the Guidance do not support all Regions, please specify the Region this Guidance is best suited for>
-
-
-## Deployment Steps (required)
-
-Deployment steps must be numbered, comprehensive, and usable to customers at any level of AWS expertise. The steps must include the precise commands to run, and describe the action it performs.
-
-* All steps must be numbered.
-* If the step requires manual actions from the AWS console, include a screenshot if possible.
-* The steps must start with the following command to clone the repo. ```git clone xxxxxxx```
-* If applicable, provide instructions to create the Python virtual environment, and installing the packages using ```requirement.txt```.
-* If applicable, provide instructions to capture the deployed resource ARN or ID using the CLI command (recommended), or console action.
-
+1. Create a new project in Amazon CodeCatalyst
+2. Select **Start with a blueprint** and choose the **AWS IoT Greengrass Foundations** blueprint. Click **Next**.
+3. Give your project a name.
+4. Select an **AWS account**, **IAM Role**, and **AWS Region**. Optionally configure settings under **Additional configuration options**.
+5. Click **Create project**.
  
-**Example:**
+### Option 2: Manually deploy CDK application
 
-1. Clone the repo using command ```git clone xxxxxxxxxx```
-2. cd to the repo folder ```cd <repo-name>```
-3. Install packages in requirements using command ```pip install requirement.txt```
-4. Edit content of **file-name** and replace **s3-bucket** with the bucket name in your account.
-5. Run this command to deploy the stack ```cdk deploy``` 
-6. Capture the domain name created by running this CLI command ```aws apigateway ............```
+1. Clone the repo using command ```git clone https://github.com/aws-solutions-library-samples/guidance-for-greengrass-foundations-on-aws.git```
+2. Change the current directory to the repo folder using command ```cd guidance-for-greengrass-foundations-on-aws```
+3. Install required packages in using command ```npm install```
+4. Edit the following attribute values in **cdk.json**:
 
+| Attribute value  | Description |
+| ------------- | ------------- |
+| `bucket_name_prefix` | The prefix of the Amazon S3 bucket name to be created  |
+| `bucket_removal_policy` | The removal policy of the Amazon S3 bucket name to be created. Should be `DESTROY` or `RETAIN``.  |
+| `stack_name` | The name of the AWS CloudFormation Stack to be created  |
+| `thing_group_name_prefix` | The prefix of the AWS IoT Thing Group name  |
+| `deployment_name` | The name of the AWS IoT Greengrass Deployment  |
 
+5. Change the current directory to the `source` folder using command ```cd source```
+6. Deploy the stack using the command ```cdk deploy``` 
+7. Enter `y` when prompted with the question, ```Do you wish to deploy these changes (y/n)?```
 
-## Deployment Validation  (required)
+## Deployment Validation
 
-<Provide steps to validate a successful deployment, such as terminal output, verifying that the resource is created, status of the CloudFormation template, etc.>
+To validate deployment, use one or more of the following methods:
 
+- From the [AWS Management Console](https://console.aws.amazon.com) in your web browser, open the CloudFormation console, click **Stacks** on the left-hand menu, and verify the stack with the name `<STACK_NAME>` has a status of **CREATE_COMPLETE**. After clicking the stack name, click the Outputs tab and take note of the `thing-group-name`, `thing-policy-name`, `tes-role-name`, and `tes-role-alias-name` values.
+- If AWS CLI is installed, run the following command to validate the deployment has a status of **CREATE_COMPLETE**, and take note of the `thing-group-name`, `thing-policy-name`, `tes-role-name`, and `tes-role-alias-name` output values: 
+    
+    ```aws cloudformation describe-stacks --stack-name <STACK_NAME>```
 
-**Examples:**
+## Running the Guidance
 
-* Open CloudFormation console and verify the status of the template with the name starting with xxxxxx.
-* If deployment is successful, you should see an active database instance with the name starting with <xxxxx> in        the RDS console.
-*  Run the following CLI command to validate the deployment: ```aws cloudformation describe xxxxxxxxxxxxx```
+### Set up your device with AWS IoT Greengrass Core software
 
+Read how to install the Greengrass Core software in [Install AWS IoT Greengrass Core software with automatic resource provisioning](https://docs.aws.amazon.com/greengrass/v2/developerguide/quick-installation.html), found in the [AWS IoT Greengrass Developer Guide, Version 2](https://docs.aws.amazon.com/greengrass/v2/developerguide/what-is-iot-greengrass.html).
 
+When you get to the [step where you install the Greengrass Core software via command-line](https://docs.aws.amazon.com/greengrass/v2/developerguide/quick-installation.html#run-greengrass-core-v2-installer), use the `thing-group-name`, `thing-policy-name`, `tes-role-name`, and `tes-role-alias-name` noted from the [Deployment Validation](#deployment-validation) section as parameters.
 
-## Running the Guidance (required)
+For example, to install on Linux platform:
 
-<Provide instructions to run the Guidance with the sample data or input provided, and interpret the output received.> 
+```
+sudo -E java -Droot="/greengrass/v2" -Dlog.store=FILE \
+  -jar ./GreengrassInstaller/lib/Greengrass.jar \
+  --aws-region region \
+  --thing-name MyGreengrassCore \
+  --thing-group-name <thing-group-name> \
+  --thing-policy-name <thing-policy-name> \
+  --tes-role-name <tes-role-name> \
+  --tes-role-alias-name <tes-role-alias-name> \
+  --component-default-user ggc_user \
+  --provision true \
+  --setup-system-service true
+```
 
-This section should include:
+## Next Steps
 
-* Guidance inputs
-* Commands to run
-* Expected output (provide screenshot if possible)
-* Output description
+### Configuring components included in your Greengrass deployment
 
+1. To add/remove/modify components included in your Greengrass deployment, update **config/deployment.components.json**.
+2. Re-deploy the CDK application (manually with `cdk deploy`, or pushing a new commit to your CodeCatalyst repository, which will trigger a deployment).
 
+### Modifying the CDK application
 
-## Next Steps (required)
+1. Update the infrastructure from this guidance architecture by making changes to this CDK application.
+2. Re-deploy the CDK application (manually with `cdk deploy`, or pushing a new commit to your CodeCatalyst repository, which will trigger a deployment).
 
-Provide suggestions and recommendations about how customers can modify the parameters and the components of the Guidance to further enhance it according to their requirements.
+## Cleanup
 
+To delete and cleanup deployed resources, use one of the following methods:
 
-## Cleanup (required)
+- To cleanup with AWS CDK:
+    - If not currently in the `source` directory, run the command ```cd source```
+    - Run the command ```cdk destroy```
+    - Enter `y` when prompted ```Are you sure you want to delete: <STACK_NAME> (y/n)?```.
+- From the [AWS Management Console](https://console.aws.amazon.com) in your web browser, open the CloudFormation console, click **Stacks** on the left-hand menu, select the stack with the name **<STACK_NAME>**, and click **Delete**.
+- If AWS CLI is installed, run the following command: 
+    
 
-- Include detailed instructions, commands, and console actions to delete the deployed Guidance.
-- If the Guidance requires manual deletion of resources, such as the content of an S3 bucket, please specify.
+    ```aws cloudformation delete-stack --stack-name <STACK_NAME>```
 
+## Feedback
 
+For any feedback, questions, or suggestions, please [submit a new issue](https://github.com/aws-solutions-library-samples/guidance-for-greengrass-foundations-on-aws/issues).
 
-## FAQ, known issues, additional considerations, and limitations (optional)
+## Notices
 
-
-**Known issues (optional)**
-
-<If there are common known issues, or errors that can occur during the Guidance deployment, describe the issue and resolution steps here>
-
-
-**Additional considerations (if applicable)**
-
-<Include considerations the customer must know while using the Guidance, such as anti-patterns, or billing considerations.>
-
-**Examples:**
-
-- “This Guidance creates a public AWS bucket required for the use-case.”
-- “This Guidance created an Amazon SageMaker notebook that is billed per hour irrespective of usage.”
-- “This Guidance creates unauthenticated public API endpoints.”
-
-
-Provide a link to the *GitHub issues page* for users to provide feedback.
-
-
-**Example:** *“For any feedback, questions, or suggestions, please use the issues tab under this repo.”*
-
-## Revisions (optional)
-
-Document all notable changes to this project.
-
-Consider formatting this section based on Keep a Changelog, and adhering to Semantic Versioning.
-
-## Notices (optional)
-
-Include a legal disclaimer
-
-**Example:**
 *Customers are responsible for making their own independent assessment of the information in this Guidance. This Guidance: (a) is for informational purposes only, (b) represents AWS current product offerings and practices, which are subject to change without notice, and (c) does not create any commitments or assurances from AWS and its affiliates, suppliers or licensors. AWS products or services are provided “as is” without warranties, representations, or conditions of any kind, whether express or implied. AWS responsibilities and liabilities to its customers are controlled by AWS agreements, and this Guidance is not part of, nor does it modify, any agreement between AWS and its customers.*
-
-
-## Authors (optional)
-
-Name of code contributors

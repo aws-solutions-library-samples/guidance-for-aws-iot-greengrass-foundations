@@ -1,0 +1,8 @@
+{
+    "aws.greengrass.Cli": {
+        "componentVersion": "2.11.1"
+    },
+    "aws.greengrass.Nucleus": {
+        "componentVersion": "2.11.1"
+    }
+}
