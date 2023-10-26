@@ -8,6 +8,8 @@ import * as targets from 'aws-cdk-lib/aws-events-targets';
 import * as cr from 'aws-cdk-lib/custom-resources';
 import { readFileSync } from 'fs';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as kms from 'aws-cdk-lib/aws-kms';
+import { NagSuppressions } from 'cdk-nag';
 
 export interface GreengrassBaseStackProps extends cdk.NestedStackProps {
     bucketNamePrefix: string;
@@ -22,7 +24,11 @@ export class GreengrassBaseStack extends cdk.NestedStack {
     constructor(scope: Construct, id: string, props: GreengrassBaseStackProps) {
         super(scope, id, props);
 
-        const greengrassServiceRole = new GreengrassServiceRole(this, 'GreengrassServiceRoleConstruct');
+        const greengrassServiceRole = new GreengrassServiceRole(this, 'GreengrassServiceRoleConstruct', {
+            account: this.account,
+            region: this.region,
+            stackName: this.node.tryGetContext("stack_name")
+        });
 
         const removalPolicyString: string = this.node.tryGetContext('bucket_removal_policy');
         let removalPolicy: cdk.RemovalPolicy;
@@ -38,12 +44,55 @@ export class GreengrassBaseStack extends cdk.NestedStack {
 
         this.bucket = new s3.Bucket(this, 'GreengrassBucket', {
             bucketName: `${props.bucketNamePrefix}-${this.account}-${this.region}`,
-            encryption: s3.BucketEncryption.KMS_MANAGED,
             removalPolicy: removalPolicy,
             autoDeleteObjects: autoDeleteObjects,
+            encryption: s3.BucketEncryption.S3_MANAGED,
+            serverAccessLogsPrefix: 's3_server_access_logs/',
+            enforceSSL: true,
+            blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL
         });
 
-        this.topic = new sns.Topic(this, `GreengrassNotificationsTopic`);
+        const encryptionKeyPolicy = new iam.PolicyDocument({
+            statements: [
+                new iam.PolicyStatement({
+                    actions: ["kms:*"],
+                    resources: ["*"],
+                    effect: iam.Effect.ALLOW,
+                    principals: [
+                        new iam.ArnPrincipal(
+                            `arn:aws:iam::${this.account}:root`
+                        ),
+                    ],
+                }),
+            ],
+        });
+
+        const key = new kms.Key(this, "EncryptionKey", {
+            enabled: true,
+            enableKeyRotation: true,
+            policy: encryptionKeyPolicy,
+        });
+
+        this.topic = new sns.Topic(this, 'GreengrassNotificationsTopic', {
+            displayName: 'Greengrass Alert Topic',
+            masterKey: key
+        });
+
+        const resourcePolicyStatement = new iam.PolicyStatement({
+            principals: [
+                new iam.AnyPrincipal()
+            ],
+            effect: iam.Effect.DENY,
+            actions: ["sns:Publish"],
+            resources: [
+                this.topic.topicArn,
+            ],
+            conditions: {
+                Bool: { "aws:SecureTransport": "false" },
+            },
+        });
+
+        this.topic.addToResourcePolicy(resourcePolicyStatement);
 
         const rule = new events.Rule(this, `GreengrassEventsRule`, {
             eventPattern: {
@@ -86,6 +135,18 @@ export class GreengrassBaseStack extends cdk.NestedStack {
             ])
         });
 
+        // Suppress resource based findings automatically added by CDK
+        NagSuppressions.addResourceSuppressions(
+            [updateEventConfigurationsResource],
+            [
+                {
+                    id: 'AwsSolutions-IAM5',
+                    reason: 'Default permissions for custom resource construct.',
+                }
+            ],
+            true
+        );
+
         this.snsPublishRole = new iam.Role(this, 'SnsPublishRole', {
             assumedBy: new iam.ServicePrincipal('iot.amazonaws.com'),   // required
         });
@@ -95,5 +156,20 @@ export class GreengrassBaseStack extends cdk.NestedStack {
             resources: [this.topic.topicArn],
             actions: ['sns:Publish'],
         }));
+
+        // Suppress resource based findings automatically added by CDK
+        NagSuppressions.addStackSuppressions(
+            this,
+            [
+                {
+                    id: 'AwsSolutions-IAM4',
+                    reason: 'Default permissions for custom resource construct.',
+                    appliesTo: [
+                        'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+                    ]
+                }
+            ],
+            true
+        );
     }
 }

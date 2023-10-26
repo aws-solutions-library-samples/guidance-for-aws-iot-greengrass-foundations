@@ -17,11 +17,11 @@
     ]
   },
   "context": {
-    "bucket_name_prefix": "{{bucket_name_prefix}}",
-    "bucket_removal_policy": "{{bucket_removal_policy}}",
-    "stack_name": "{{stack_name}}",
-    "thing_group_name_prefix": "{{thing_group_name_prefix}}",
-    "deployment_name": "{{deployment_name}}",
+    "bucket_name_prefix": "iot-delete2",
+    "bucket_removal_policy": "DESTROY",
+    "stack_name": "iotdel2",
+    "thing_group_name_prefix": "iotgroupdel2",
+    "deployment_name": "iotgreendel2",
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk/core:checkSecretUsage": true,
     "@aws-cdk/core:target-partitions": [

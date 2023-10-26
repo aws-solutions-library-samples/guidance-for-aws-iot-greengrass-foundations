@@ -43,7 +43,7 @@ async function generateGreengrassServiceRole(ggv2: GreengrassV2, iam: IAM, ssm: 
         let roleInput: CreateRoleCommandInput;
 
         roleInput = {
-            RoleName: `Greengrass_ServiceRole${Date.now()}`,
+            RoleName: `GreengrassFoundations_ServiceRole-${region}`,
             AssumeRolePolicyDocument: JSON.stringify({
                 Version: "2012-10-17",
                 Statement: [
@@ -132,7 +132,9 @@ async function deleteGreengrassServiceRole(ggv2: GreengrassV2, iam: IAM, ssm: SS
 
             });
         });
-    });
+    }).catch(async (err) => {
+        console.log(err);
+    });;
 
 };
 

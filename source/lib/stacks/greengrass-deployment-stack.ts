@@ -6,6 +6,7 @@ import * as sns from 'aws-cdk-lib/aws-sns';
 import { readFileSync } from 'fs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import { NagSuppressions } from 'cdk-nag';
 
 
 export interface GreengrassDeploymentStackProps extends cdk.NestedStackProps {
@@ -86,6 +87,18 @@ export class GreengrassDeploymentStack extends cdk.NestedStack {
             ],
         }));
 
+        // Suppress resource based findings automatically added by CDK
+        NagSuppressions.addResourceSuppressions(
+            [tokenExchangeRole],
+            [
+                {
+                    id: 'AwsSolutions-IAM5',
+                    reason: 'Permissive actions allowed for Greengrass token exchange role.',
+                }
+            ],
+            true
+        );
+
         const cfnRoleAlias = new iot.CfnRoleAlias(this, `${thingGroupName}-GreengrassV2TokenExchangeRoleAlias`, {
             roleArn: tokenExchangeRole.roleArn,
             credentialDurationSeconds: 3600,
@@ -116,6 +129,5 @@ export class GreengrassDeploymentStack extends cdk.NestedStack {
         new cdk.CfnOutput(this, 'thing-policy-name', { value: policy.policyName || '' });
         new cdk.CfnOutput(this, 'tes-role-name', { value: tokenExchangeRole.roleName });
         new cdk.CfnOutput(this, 'tes-role-alias-name', { value: cfnRoleAlias.roleAlias || '' });
-
     }
 }
