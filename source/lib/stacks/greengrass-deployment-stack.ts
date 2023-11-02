@@ -114,8 +114,57 @@ export class GreengrassDeploymentStack extends cdk.NestedStack {
                         statements: [
                             new iam.PolicyStatement(
                                 {
-                                    actions: ['iot:*'],
-                                    resources: ['*'],
+                                    actions: ['iot:Publish'],
+                                    resources: [`arn:aws:iot:${this.region}:${this.account}:topic/$aws/things/$\{iot:Connection.Thing.ThingName}-gci/shadow/get`],
+                                    effect: iam.Effect.ALLOW
+                                }
+                            ),
+                            new iam.PolicyStatement(
+                                {
+                                    actions: ['iot:Subscribe'],
+                                    resources: [
+                                        `arn:aws:iot:${this.region}:${this.account}:topicfilter/$aws/things/$\{iot:Connection.Thing.ThingName}-gci/shadow/update/delta`,
+                                        `arn:aws:iot:${this.region}:${this.account}:topicfilter/$aws/things/$\{iot:Connection.Thing.ThingName}-gci/shadow/get/accepted`
+                                    ],
+                                    effect: iam.Effect.ALLOW
+                                }
+                            ),
+                            new iam.PolicyStatement(
+                                {
+                                    actions: ['iot:Receive'],
+                                    resources: [
+                                        `arn:aws:iot:${this.region}:${this.account}:topic/$aws/things/$\{iot:Connection.Thing.ThingName}-gci/shadow/update/delta`,
+                                        `arn:aws:iot:${this.region}:${this.account}:topic/$aws/things/$\{iot:Connection.Thing.ThingName}-gci/shadow/get/accepted`
+                                    ],
+                                    effect: iam.Effect.ALLOW
+                                }
+                            ),
+                            new iam.PolicyStatement(
+                                {
+                                    actions: [
+                                        "greengrass:PutCertificateAuthorities",
+                                        "greengrass:VerifyClientDeviceIdentity"
+                                    ],
+                                    resources: ["*"],
+                                    effect: iam.Effect.ALLOW
+                                }
+                            ),
+                            new iam.PolicyStatement(
+                                {
+                                    actions: [
+                                        "greengrass:VerifyClientDeviceIoTCertificateAssociation"
+                                    ],
+                                    resources: [`arn:aws:iot:${this.region}:${this.account}:thing/*`],
+                                    effect: iam.Effect.ALLOW
+                                }
+                            ),
+                            new iam.PolicyStatement(
+                                {
+                                    actions: [
+                                        "greengrass:GetConnectivityInfo",
+                                        "greengrass:UpdateConnectivityInfo"
+                                    ],
+                                    resources: [`arn:aws:iot:${this.region}:${this.account}:thing/$\{iot:Connection.Thing.ThingName}`],
                                     effect: iam.Effect.ALLOW
                                 }
                             )

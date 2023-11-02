@@ -49,7 +49,6 @@ export class GreengrassServiceRole extends Construct {
                 }),
                 new iam.PolicyStatement({
                     actions: [
-                        'greengrass:AssociateServiceRoleToAccount',
                         'greengrass:DisassociateServiceRoleFromAccount',
                         'greengrass:GetServiceRoleForAccount',
                     ],
@@ -58,6 +57,7 @@ export class GreengrassServiceRole extends Construct {
                 }),
                 new iam.PolicyStatement({
                     actions: [
+                        'greengrass:AssociateServiceRoleToAccount',
                         'iam:PassRole',
                         'iam:AttachRolePolicy',
                         'iam:CreateRole',
