@@ -26,14 +26,6 @@ The AWS IoT Greengrass Foundations guidance enables customers to quickly and rel
 
 ![reference architecture](assets/images/architecture.png)
 
-### Cost
-
-You are responsible for the cost of the AWS services used while running this Guidance. As of October 2023, the cost for running this Guidance with the default settings in the US West (Oregon) AWS Region is approximately **$XX per month**, using the following assumptions:
-
-- ...
-- ...
-- ...
-
 ## Prerequisites
 
 ### Operating System
